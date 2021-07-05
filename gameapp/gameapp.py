@@ -1,5 +1,5 @@
 import pygame
-from pygame import Rect
+from pygame import Rect, transform
 from pygame.locals import *
 
 
@@ -8,13 +8,14 @@ class GameImage():
         self.image = None
         self.fileName = fileName
         self.position = Rect(position[0], position[1], 0, 0)
+        self.load()
 
     def load(self):
         if self.fileName and not self.image:
             self.image = pygame.image.load(self.fileName).convert()
 
     def render(self, position = None):
-        self.load()
+        # self.load()
 
         if position:
             self.position.x = position[0]
@@ -22,11 +23,16 @@ class GameImage():
 
         pygame.display.get_surface().blit(self.image, self.position)
 
+    def scale2x(self):
+        self.image = transform.scale2x(self.image)
+        
+
 class GameFont():
     def __init__(self, name, size):
         self.name = name
         self.size = size
         self.font = None
+        self.load()
 
     def load(self):
         if not self.font:
@@ -44,7 +50,7 @@ class GameText(GameImage):
         self.render(position)
 
     def render(self, position = None):
-        self.font.load()
+        # self.font.load()
 
         if position != None:
             self.position = position
@@ -64,7 +70,12 @@ class GameApp:
         self.keysPressed = []
         self.curUserEventId = USEREVENT 
         self.clock = None
-        
+        pygame.init()
+        self.clock = pygame.time.Clock()
+        self.surface = pygame.display.set_mode((self.width, self.height))
+        if self.isFullScreen == True:
+            pygame.display.toggle_fullscreen()
+       
  
 
 
@@ -89,15 +100,9 @@ class GameApp:
         return self.curUserEventId
     
     def start(self):
-        pygame.init()
-
-        self.surface = pygame.display.set_mode((self.width, self.height))
-        if self.isFullScreen == True:
-            pygame.display.toggle_fullscreen()
-
-        self.clock = pygame.time.Clock()
  
         self.on_start()
+
         while( self.isRunning ):
             self.keysPressed = pygame.key.get_pressed()
             for event in pygame.event.get():

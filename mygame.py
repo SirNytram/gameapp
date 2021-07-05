@@ -5,17 +5,23 @@ class MyRedCar(GameImage):
     def __init__(self):
         super().__init__("images\\redcar.png", (200, 300))
         self.bRightSide = True
+        self.t = Rect(0,0,0,0)
 
     def move(self):
+        
         if self.bRightSide:
-            self.position.move_ip(1, 0)
+            self.position.move_ip(3, 0)
         else:
-            self.position.move_ip(-1, 0)
+            self.position.move_ip(-3, 0)
 
         if self.position.x < 0:
             self.position.x = 200
         if self.position.x > 400:
             self.position.x = 200
+
+    def toggle(self):
+        self.bRightSide = not self.bRightSide
+
 
 class MyGame(GameApp):
     def __init__(self):
@@ -24,6 +30,7 @@ class MyGame(GameApp):
         self.redcar = MyRedCar()
         self.fps = 50
         self.bluecar = GameImage('images\\bluecar.png', (10,500))
+        self.bluecar.scale2x()
         # self.redcar = 
         self.fontVerdana = GameFont('Verdana',50)
         self.myText = GameText(self.fontVerdana, 'mart is great', (125, 300), (255, 255, 125))
@@ -52,7 +59,8 @@ class MyGame(GameApp):
             self.isRunning = False
 
         if isDown == True and key == K_t:
-            self.redcar.bRightSide = not self.redcar.bRightSide
+
+            self.redcar.toggle()
 
 
 if __name__ == "__main__" :
