@@ -1,4 +1,4 @@
-import os 
+import os
 
 # load pythonsta libraries
 if os.name == 'posix':
