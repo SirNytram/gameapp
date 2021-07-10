@@ -23,8 +23,10 @@ class MyRedCar(GameImage):
         self.bRightSide = not self.bRightSide
 
 
+
 class TestGane(GameApp):
     def __init__(self):
+        self.setScale(1)
         super().__init__() 
 
         self.width = 1000
