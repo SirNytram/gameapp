@@ -5,11 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Module",
+            "name": "Python: Current Test Module",
             "type": "python",
             "request": "launch",
-            "module": "tests.mygame"
+            "module": "tests.${fileBasenameNoExtension}",
+            // "stopOnEntry": false
         },
+        {
+            "name": "Python: Current Module",
+            "type": "python",
+            "request": "launch",
+            "module": "${command:extension.commandvariable.file.relativeDirDots}.${fileBasenameNoExtension}",
+            // "stopOnEntry": false
+        },        
+        
         {
             "name": "Python: Current File",
             "type": "python",

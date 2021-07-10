@@ -23,7 +23,7 @@ class MyRedCar(GameImage):
         self.bRightSide = not self.bRightSide
 
 
-class MyGame(GameApp):
+class TestGane(GameApp):
     def __init__(self):
         super().__init__() 
 
@@ -65,4 +65,4 @@ class MyGame(GameApp):
 
 
 if __name__ == "__main__" :
-    MyGame().start()
+    TestGane().start()
