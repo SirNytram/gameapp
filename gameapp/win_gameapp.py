@@ -242,6 +242,10 @@ class GameApp:
     def quit(self):
         self.isRunning = False
 
+    def setScale(self, scale):
+        global  gblScale
+        gblScale = scale
+
 if __name__ == "__main__" :
     
     GameApp().start()
