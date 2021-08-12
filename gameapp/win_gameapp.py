@@ -127,6 +127,16 @@ class GameImage():
         ret.update_rect(ret._image)
         return self
 
+    def flip(self, vertical:bool=False, horizontal:bool=False, in_place:bool = False):
+        if in_place:
+            ret = self
+        else:
+            ret = self.copy()
+        
+        ret._image = pygame.transform.flip(ret._image, vertical, horizontal)
+        ret.update_rect(ret._image)
+        return ret
+
     def rotate_scale(self, angle:float=0, scale:float=1.0, in_place:bool = False):
         if in_place:
             ret = self
