@@ -64,8 +64,6 @@ class GameImage():
         if source:
             if type(source) == str:
                 self._image = pygame.image.load(source).convert_alpha()
-            elif type(source) == Surface:
-                self._image = source
             elif type(source) == GameImage:
                 self._image = source._image
 
@@ -197,7 +195,19 @@ class GameImage():
 
 class GameShapeRect(GameImage):
     def __init__(self, rect = (0,0,0,0), color = (0,0,0), line_width:int = 1, corner_radius:int = 0):
-        '''Rectangle Shape'''
+        '''Draw a Rectangle.
+
+        Parameters
+            rect:       list of values representing the rectangle boundaries (left, top, width, height). Can be Rect object
+            color:      list of values representing the rectangle color(red, green, blue)
+            line_width: width of the line. set to 0 if you want the rectangle to be filled
+            corner_radius: radius of the corners. set to 0 to have a square rectangle
+
+        Attributes
+            rect:   test1
+            color:  tes2
+            line:   test4
+        '''
         super().__init__()
         if type(color) != Color:
             color = Color(color[0], color[1], color[2])
@@ -607,6 +617,6 @@ class GameApp:
         self.is_running = False
 
 
+
 if __name__ == "__main__" :
-    
     GameApp().start()
