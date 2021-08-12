@@ -25,6 +25,7 @@ class MyRedCar(GameImage):
 
 class TestGame(GameApp):
     def __init__(self):
+        self.setScale(1)
         super().__init__() 
 
         self.width = 1000

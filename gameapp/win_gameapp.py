@@ -492,6 +492,9 @@ class GameApp:
 
     def drawRect(self, rect: Rect, color=(0,0,0), width=0, border_radius=0):
         pygame.draw.rect(pygame.display.get_surface(), color, pygame.Rect(rect.left, rect.top, rect.width, rect.height), width, border_radius)
+    def setScale(self, scale):
+        global  gblScale
+        gblScale = scale
 
 if __name__ == "__main__" :
     
