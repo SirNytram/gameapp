@@ -5,10 +5,38 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Test Game",
+            "name": "Tank Battle",
             "type": "python",
             "request": "launch",
-            "module": "tests.testgame",
+            "module": "tests.tankbattle",
+            // "stopOnEntry": false
+        },
+        {
+            "name": "Cube Ball",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.cubeball",
+            // "stopOnEntry": false
+        },
+        {
+            "name": "Defender",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.defender",
+            // "stopOnEntry": false
+        },
+        {
+            "name": "Dino Jumper",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.dino",
+            // "stopOnEntry": false
+        },
+        {
+            "name": "Flappy",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.flappy",
             // "stopOnEntry": false
         },
         {
