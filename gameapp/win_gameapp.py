@@ -452,7 +452,11 @@ class GameApp:
 
         global gblScale
         gblScale = scale
-        self._surface = pygame.display.set_mode((int(self.rect.width * gblScale), int(self.rect.height * gblScale + vkspace)), display=display_number)
+        try:
+            self._surface = pygame.display.set_mode((int(self.rect.width * gblScale), int(self.rect.height * gblScale + vkspace)), display=display_number)
+        except:
+            self._surface = pygame.display.set_mode((int(self.rect.width * gblScale), int(self.rect.height * gblScale + vkspace)), display=0)
+
         if full_screen == True:
             pygame.display.toggle_fullscreen()
       
