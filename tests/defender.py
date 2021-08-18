@@ -1,7 +1,8 @@
-from gameapp import GameApp, GameSection, GameImage, kb
+from gameapp import GameApp, GameSection, GameImage, kb, Color, GameShapeRect
 
 class GameScreen(GameSection):
     def on_start(self):
+        self.bg = GameShapeRect(self.gameapp.rect, Color('black'), line_width=0)
         self.canon = GameImage('tests\\assets\\canon.png', self.gameapp.rect.midbottom).rotate(-90)
 
     def on_loop(self):
@@ -14,6 +15,7 @@ class GameScreen(GameSection):
         self.canon.rotation = self.canon.get_angle_towards(game.mouse_position)
 
     def on_render(self):
+        self.bg.render()
         self.canon.render()
 
 game = GameApp()
