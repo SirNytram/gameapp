@@ -13,11 +13,8 @@ class Flappy():
         self.position = Point(50,300)
         self.scale = 1.0
     
-    def get_curimg(self)->GameImage:
-        return self.imgs[self.curimgno % len(self.imgs)]
-
     def render(self):
-        imgToRender = self.get_curimg()
+        imgToRender = self.imgs[self.curimgno]
         imgToRender.position = self.position
         imgToRender.render()
         
@@ -32,7 +29,9 @@ class Flappy():
             self.position.x += 5
 
     def animate(self):
-        self.curimgno += 1        
+        self.curimgno += 1
+        if self.curimgno > len(self.imgs):
+            self.curimgno = 0
 
 class Pipe():
     def __init__(self, number, hole_y):
@@ -45,23 +44,6 @@ class Pipe():
         self.top_pipe.rect.bottom = self.position.y - 50
 
         self.pipe_parts:List[GameImage] = []
-
-        # master_pipe_part = GameImage('pipe_part.png')
-        # last_midbottom = self.bottom_pipe.rect.midbottom
-        # while last_midbottom[1] < 600:
-        #     pipe_part = GameImage(master_pipe_part)
-        #     pipe_part.rect.midtop = last_midbottom
-        #     last_midbottom = pipe_part.rect.midbottom
-        #     self.pipe_parts.append(pipe_part)
-
-        # master_pipe_part = GameImage('pipe_part.png').rotate(180)
-        # last_midtop = self.top_pipe.rect.midtop
-        # while last_midtop[1] > 0:
-        #     pipe_part = GameImage(master_pipe_part)
-        #     pipe_part.rect.midbottom = last_midtop
-        #     pipe_part.position.y += 1
-        #     last_midtop = pipe_part.rect.midtop
-        #     self.pipe_parts.append(pipe_part)
 
     def move(self):
         self.position.x -= 5
@@ -77,10 +59,9 @@ class Pipe():
                 pipe_part.render()
 
 
-
     def check_collision(self, flappy:Flappy):
         ret = False
-        cur_flappy_img = flappy.get_curimg()
+        cur_flappy_img = flappy.imgs[flappy.curimgno]
         if cur_flappy_img.rect.right > self.bottom_pipe.rect.left:
             if cur_flappy_img.rect.right < self.bottom_pipe.rect.right:
                 if cur_flappy_img.rect.top < self.top_pipe.rect.bottom:
