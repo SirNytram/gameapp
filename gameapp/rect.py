@@ -217,7 +217,7 @@ class Point():
     def __repr__(self) -> str:
         return f'Point({self._left},{self._top})'
     ###############
-    def distanceTo(self, point)->float:
+    def distance_to(self, point)->float:
         if type(point) != Point:
             point = Point(point[0], point[1])
 
@@ -225,7 +225,7 @@ class Point():
         dy = self._top - point._top
         return math.sqrt((dx*dx)+(dy*dy))
 
-    def rotateAround(self, angle, point):
+    def rotate_around(self, angle, point):
         if type(point) != Point:
             point = Point(point[0], point[1])
 
@@ -535,7 +535,7 @@ class Rect():
         return ret
 
 
-    def collidesList(self, list)->int:
+    def collides_list(self, list)->int:
         ret = -1
         for i, object in enumerate(list):
             if self.collides(object):
@@ -561,7 +561,7 @@ class Rect():
 
         return ret
         
-    def containsList(self, list):
+    def contains_list(self, list):
         ret = -1
         for i, rect in enumerate(list):
             if self.contains(rect):
