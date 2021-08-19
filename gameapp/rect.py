@@ -532,6 +532,12 @@ class Rect():
                 self.top < object.y and \
                 self.bottom  > object.y :
                     ret = True
+        elif type(object) in (list, tuple):
+            if self.collides_list(object) != -1:
+                ret = True
+        else:
+            raise Exception('unsupported type')
+            
         return ret
 
 
@@ -558,6 +564,13 @@ class Rect():
                 self.top < object.y and \
                 self.bottom  > object.y :
                     ret = True
+        elif type(object) in (list, tuple):
+            if self.contains_list(object) != -1:
+                ret = True
+        else:
+            raise Exception('unsupported type')
+            
+        return ret
 
         return ret
         
@@ -569,3 +582,12 @@ class Rect():
 
         return ret
 
+
+if __name__ == "__main__" :
+
+    bullets = (Point(10,10), Point(100,50), Point(200,200), Point(20,20))
+    player = Rect(15,15,10,10)
+    if player.collides(bullets):
+        print('you are dead')
+
+    print(player.collides_list(bullets))
