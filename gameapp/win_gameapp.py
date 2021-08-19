@@ -352,6 +352,9 @@ class GameAudio():
 
     def set_volume(self, volume = 1):
         self.mySound.set_volume(volume)
+
+    def get_busy(self):
+        return pygame.mixer.get_busy()
         
 class VirtualKey():
     def __init__(self, parent, label, key, colrow):
