@@ -549,6 +549,9 @@ class GameApp:
         self.timers[name].active = False
 
 
+    def add_section(self, name: str, section: GameSection):
+        self.sections[name] = section
+        
     def start(self):
         if self.has_vk:
             self.virtual_keys.append(VirtualKey(self, 'L', kb.K_LEFT, (5,1)))
