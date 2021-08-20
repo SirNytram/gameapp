@@ -9,9 +9,9 @@ import time
 import math
 
 gblScale = 1.0
-
+gblAnchorPoint = (0.,0.)
 class GameImage():
-    def __init__(self, source = None, position = (0,0), *, anchor_point = (0.5,0.5), rotation:float = 0.0, scale:float = 1.0, show_rect:bool=False):
+    def __init__(self, source = None, position = (0,0), *, anchor_point = gblAnchorPoint, rotation:float = 0.0, scale:float = 1.0, show_rect:bool=False):
         self._image = pygame.Surface((0,0))
         self.anchor_point = Point(anchor_point[0],anchor_point[1])
         self.rotation = rotation
@@ -300,7 +300,7 @@ class GameFont():
                 self.font = pygame.font.Font(self.name, int(self.size * gblScale))
 
 class GameText(GameImage):
-    def __init__(self, text = '', position = (0,0), color = (0,0,0), font = GameFont(), anchor_point = (0.5, 0.5)):
+    def __init__(self, text = '', position = (0,0), color = (0,0,0), font = GameFont(), anchor_point = gblAnchorPoint):
         super().__init__(position=position, anchor_point=anchor_point)
         if type(color) != Color:
             color = Color(color[0], color[1], color[2])
@@ -415,7 +415,7 @@ class GameSection:
     def on_after_render(self):
         pass
 
-    def on_key(self, is_down, key, mod):
+    def on_key(self, is_down, key, mod)->bool:
         pass
 
     def on_mouse(self, is_down, key, position = Point()):
@@ -478,7 +478,8 @@ class GameApp:
                     section.on_start()
                     section.started_once = True
                     
-                section.on_event(event_id)
+                if section.on_event(event_id) == False:
+                    break
     
     def on_loop(self):
         for section in self.sections.values():
@@ -487,7 +488,8 @@ class GameApp:
                     section.on_start()
                     section.started_once = True
                     
-                section.on_loop()
+                if section.on_loop() == False:
+                    break
 
     def on_render(self):
         for section in self.sections.values():
@@ -496,7 +498,8 @@ class GameApp:
                     section.on_start()
                     section.started_once = True
                     
-                section.on_render()
+                if section.on_render() == False:
+                    break
 
     def on_after_render(self):
         for section in self.sections.values():
@@ -505,7 +508,8 @@ class GameApp:
                     section.on_start()
                     section.started_once = True
                     
-                section.on_after_render()
+                if section.on_after_render() == False:
+                    break
 
     def on_key(self, is_down, key, mod):
         for section in self.sections.values():
@@ -514,7 +518,8 @@ class GameApp:
                     section.on_start()
                     section.started_once = True
                     
-                section.on_key(is_down, key, mod)
+                if section.on_key(is_down, key, mod) == False:
+                    break
 
     def on_mouse(self, is_down, key, position = Point()):
         for section in self.sections.values():
@@ -523,7 +528,8 @@ class GameApp:
                     section.on_start()
                     section.started_once = True
                     
-                section.on_mouse(is_down, key, position)
+                if section.on_mouse(is_down, key, position) == False:
+                    break
 
     def on_timer(self, timer:GameTimer):
         for section in self.sections.values():
@@ -532,7 +538,8 @@ class GameApp:
                     section.on_start()
                     section.started_once = True
                     
-                section.on_timer(timer)
+                if section.on_timer(timer) == False:
+                    break
 
     def add_timer(self, name, milliseconds:float, num_repeats:int=0, delay_MS:float=0.0):
         if name not in self.timers:
@@ -553,6 +560,7 @@ class GameApp:
 
 
     def add_section(self, name: str, section: GameSection):
+        section.on_start()
         self.sections[name] = section
         
     def start(self):
@@ -632,7 +640,9 @@ class GameApp:
     def quit(self):
         self.is_running = False
 
-
+    def set_gbl_anchor_point(self, anchor_point):
+        global gblAnchorPoint
+        gblAnchorPoint = anchor_point
 
 if __name__ == "__main__" :
     GameApp().start()
