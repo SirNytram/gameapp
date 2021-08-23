@@ -38,7 +38,7 @@ class Level(GameSection):
             self.player.rotation += 2
 
 
-        if self.player.position.distanceTo(self.enemy.position) < 40:
+        if self.player.position.distance_to(self.enemy.position) < 40:
             if not self.iscolliding:
                 self.crash_sound.play()
             self.iscolliding = True
