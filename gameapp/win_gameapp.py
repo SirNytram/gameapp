@@ -415,7 +415,7 @@ class GameSection:
     def on_after_render(self):
         pass
 
-    def on_key(self, is_down, key, mod)->bool:
+    def on_key(self, is_down, key, mod):
         pass
 
     def on_mouse(self, is_down, key, position = Point()):
