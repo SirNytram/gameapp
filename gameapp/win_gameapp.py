@@ -51,7 +51,10 @@ class GameImage():
         return self._position
 
     @position.setter
-    def position(self, value:Point):
+    def position(self, value):
+        if type(value) != Point:
+            value = Point(value[0], value[1])
+            
         self._position = Point(value._left, value._top)
         self._rect._left = self._position._left - (self._rect._width * self.anchor_point[0])
         self._rect._top = self._position._top - (self._rect._height * self.anchor_point[1])
@@ -626,10 +629,12 @@ class GameApp:
 
             self._clock.tick(self._fps)
  
-    def quit(self):
+    def stop(self):
         self.is_running = False
 
 
 
 if __name__ == "__main__" :
     GameApp().start()
+
+# type: ignore
