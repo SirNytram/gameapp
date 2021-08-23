@@ -133,7 +133,7 @@ class Menu(GameSection):
                 self.active = False
                 self.gameapp.sections['flappy'].active = True
             elif key == kb.K_ESCAPE:
-                self.gameapp.quit()
+                self.gameapp.stop()
 
 game = GameApp(display_number=1, width= 600, height=600)
 game.sections['menu'] = Menu(game, True)

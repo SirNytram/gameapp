@@ -78,7 +78,7 @@ class Level(GameSection):
                 self.player_bullets.append(bullet)
 
             if key == kb.K_ESCAPE:
-                self.gameapp.quit()
+                self.gameapp.stop()
 
 
 game = GameApp(display_number=1, width= 600, height=600)
