@@ -126,9 +126,10 @@ class GameImage():
         else:
             ret = self.copy()
 
-        ret._image = pygame.transform.scale(ret._image, (width, height))
+        global gblScale
+        ret._image = pygame.transform.scale(ret._image, (width * gblScale, height * gblScale))
         ret.update_rect(ret._image)
-        return self
+        return ret
 
     def flip(self, vertical:bool=False, horizontal:bool=False, in_place:bool = False):
         if in_place:
