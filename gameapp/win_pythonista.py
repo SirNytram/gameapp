@@ -1,19 +1,31 @@
 class Path():
+    def __init__(self) -> None:
+        self.line_width =0
     #Create a Path with an oval in the given rectangle.
     def oval(self, x, y, width, height):
-        pass
+        return self
 
 
     #Create a Path with a given rectangle.
     def rect(self, x, y, width, height):
-        pass
+        return self
 
     #Create a Path with a rounded rectangle.
     def rounded_rect(self, x, y, width, height, corner_radius):
+        return self
+
+    def move_to(self, x, y):
+        pass
+
+    def line_to(self, x, y):
         pass
 
 class Scene():
-    pass
+    def __init__(self):
+        self.size = (0,0)
+
+    def add_child(self, object):
+        pass
 
 # class Img():
     # anchor
@@ -22,7 +34,9 @@ class SpriteNode():
         # self.image = Img()
         self.anchor_point = (0,0)
         self.scale = 1.0
-
+        self.size = (0,0)
+        self.blend_mode = 0
+        self.color = (0,0,0)
     def add_child(self, node):
         pass
             
@@ -30,8 +44,14 @@ class SpriteNode():
         pass
     
 class LabelNode():
-    def __init__(self, text, position=(0, 0), z_position=0.0, scale=1.0, x_scale=1.0, y_scale=1.0, alpha=1.0, speed=1.0, parent=None, size=None, color='white', blend_mode=0):
-        pass
+    def __init__(self, text, font = ('', 10), position=(0, 0), z_position=0.0, scale=1.0, x_scale=1.0, y_scale=1.0, alpha=1.0, speed=1.0, parent=None, size=None, color='white', blend_mode=0):
+        self.anchor_point = (0,0)
+        self.scale = 1.0
+        self.size = (0,0)
+        self.blend_mode = 0
+        self.color = (0,0,0)
+        self.text = ''
+        self.font = ('',0)
 
     def add_child(self, node):
         pass
@@ -41,10 +61,18 @@ class LabelNode():
 
 class ShapeNode():
     def __init__(self, path=None, fill_color='white', stroke_color='clear', shadow=None):
-        pass
+        self.anchor_point = (0,0)
+        self.scale = 1.0
+        self.size = (0,0)
+        self.blend_mode = 0
+        self.color = (0,0,0)
 
 def run(scene, orientation='DEFAULT_ORIENTATION', frame_interval=1, anti_alias=False, show_fps=False, multi_touch=True):
     pass
 
-class sound():
-    pass
+class Effect():
+    def stop(self):
+        pass
+    
+def play_effect(fileName)->Effect:
+    return Effect()

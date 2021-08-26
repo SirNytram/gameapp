@@ -2,11 +2,10 @@ import os
 
 # load pythonsta libraries
 if os.name == 'posix': 
+    import gameapp.kb
+    from gameapp.rect import Rect, Point, Color
+    from gameapp.ios_gameapp import GameApp, GameSection, GameImage, GameText, GameFont, GameAudio, GameTimer,  GameShapeRect, GameShapeCircle, GameShapeLine
 
-    import kb
-    from .ios_gameapp import GameApp, GameText, GameFont, GameImage, GameAudio, GameSection
-    from .rect import Rect, Point
-    
 #load pygame libraries
 elif os.name == 'nt':
     import pygame
