@@ -1,4 +1,4 @@
-from gameapp import GameApp, GameSection, kb, Rect, Point, Color, GameShapeCircle, GameShapeRect,GameText, GameShapeLine
+from gameapp import GameApp, GameSection, kb, Color, GameShapeCircle, GameShapeRect,GameText, GameShapeLine
 import random
 
 class MainSection(GameSection):
@@ -55,5 +55,5 @@ class MainSection(GameSection):
 
 #main code
 game = GameApp(display_number = 1, height = 600, width=300)
-game.sections['main'] = MainSection(game, True)
+game.add_section('main', MainSection(game, True))
 game.start()

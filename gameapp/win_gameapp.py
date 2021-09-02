@@ -9,9 +9,13 @@ import time
 import math
 
 gblScale = 1.0
-
+# gblAnchorPoint = (0.5,0.5)
+gblAnchorPoint = (0.0,0.0)
 class GameImage():
-    def __init__(self, source = None, position = (0,0), *, anchor_point = (0.5,0.5), rotation:float = 0.0, scale:float = 1.0, show_rect:bool=False):
+    def __init__(self, source = None, position = (0,0), *, anchor_point = None, rotation:float = 0.0, scale:float = 1.0, show_rect:bool=False):
+        if anchor_point == None:
+            anchor_point = gblAnchorPoint
+        
         self._image = pygame.Surface((0,0))
         self.anchor_point = Point(anchor_point[0],anchor_point[1])
         self.rotation = rotation
@@ -28,8 +32,8 @@ class GameImage():
     @property
     def rect(self)->Rect:
         if self._position._changed:
-            self._rect._left = self._position._left - (self._rect._width * self.anchor_point[0])
-            self._rect._top = self._position._top - (self._rect._height * self.anchor_point[1])
+            self._rect._left = self._position._left - (self._rect._width * self.anchor_point.left)
+            self._rect._top = self._position._top - (self._rect._height * self.anchor_point.top)
             self._position._changed = False
 
         return self._rect
@@ -51,7 +55,10 @@ class GameImage():
         return self._position
 
     @position.setter
-    def position(self, value:Point):
+    def position(self, value):
+        if type(value) != Point:
+            value = Point(value[0], value[1])
+            
         self._position = Point(value._left, value._top)
         self._rect._left = self._position._left - (self._rect._width * self.anchor_point[0])
         self._rect._top = self._position._top - (self._rect._height * self.anchor_point[1])
@@ -80,8 +87,6 @@ class GameImage():
         self._rect._top = self._position._top-(size[1]*self.anchor_point[1])
         self._rect._width = size[0]
         self._rect._height = size[1]
-
-
 
     def render(self, position = None):
         if position:
@@ -123,9 +128,10 @@ class GameImage():
         else:
             ret = self.copy()
 
-        ret._image = pygame.transform.scale(ret._image, (width, height))
+        global gblScale
+        ret._image = pygame.transform.scale(ret._image, (width * gblScale, height * gblScale))
         ret.update_rect(ret._image)
-        return self
+        return ret
 
     def flip(self, vertical:bool=False, horizontal:bool=False, in_place:bool = False):
         if in_place:
@@ -245,7 +251,9 @@ class GameShapeCircle(GameImage):
         self.radius = radius
         self.line_width = line_width
 
-        self.color = Color(color[0], color[1], color[2])
+        if type(color) != Color:
+            color = Color(color[0], color[1], color[2])
+        self.color = color
 
         self._image = pygame.Surface((self.radius * 2, self.radius * 2))
         self.update_rect(self._image)
@@ -300,7 +308,7 @@ class GameFont():
                 self.font = pygame.font.Font(self.name, int(self.size * gblScale))
 
 class GameText(GameImage):
-    def __init__(self, text = '', position = (0,0), color = (0,0,0), font = GameFont(), anchor_point = (0.5, 0.5)):
+    def __init__(self, text = '', position = (0,0), color = (0,0,0), font = GameFont(), anchor_point = None):
         super().__init__(position=position, anchor_point=anchor_point)
         if type(color) != Color:
             color = Color(color[0], color[1], color[2])
@@ -352,6 +360,9 @@ class GameAudio():
 
     def set_volume(self, volume = 1):
         self.mySound.set_volume(volume)
+
+    def get_busy(self):
+        return pygame.mixer.get_busy()
         
 class VirtualKey():
     def __init__(self, parent, label, key, colrow):
@@ -395,7 +406,6 @@ class GameSection:
     def __init__(self, gameapp, active:bool = False):
         self.gameapp:GameApp = gameapp
         self.active = active
-        self.started_once = False
 
     def on_start(self):
         pass
@@ -466,77 +476,10 @@ class GameApp:
     def get_lastframe_MS(self):
         return self._milliseconds_since_last_frame 
 
-    def on_start(self):
-        for section in self.sections.values():
-            if section.active and not section.started_once:
-                section.on_start()
-                section.started_once = True
 
-    def on_event(self, event_id):
-        for section in self.sections.values():
-            if section.active:
-                if not section.started_once:
-                    section.on_start()
-                    section.started_once = True
-                    
-                section.on_event(event_id)
-    
-    def on_loop(self):
-        for section in self.sections.values():
-            if section.active:
-                if not section.started_once:
-                    section.on_start()
-                    section.started_once = True
-                    
-                section.on_loop()
 
-    def on_render(self):
-        for section in self.sections.values():
-            if section.active:
-                if not section.started_once:
-                    section.on_start()
-                    section.started_once = True
-                    
-                section.on_render()
-
-    def on_after_render(self):
-        for section in self.sections.values():
-            if section.active:
-                if not section.started_once:
-                    section.on_start()
-                    section.started_once = True
-                    
-                section.on_after_render()
-
-    def on_key(self, is_down, key, mod):
-        for section in self.sections.values():
-            if section.active:
-                if not section.started_once:
-                    section.on_start()
-                    section.started_once = True
-                    
-                section.on_key(is_down, key, mod)
-
-    def on_mouse(self, is_down, key, position = Point()):
-        for section in self.sections.values():
-            if section.active:
-                if not section.started_once:
-                    section.on_start()
-                    section.started_once = True
-                    
-                section.on_mouse(is_down, key, position)
-
-    def on_timer(self, timer:GameTimer):
-        for section in self.sections.values():
-            if section.active:
-                if not section.started_once:
-                    section.on_start()
-                    section.started_once = True
-                    
-                section.on_timer(timer)
-
-    def add_timer(self, name, milliseconds:float, num_repeats:int=0, delay_MS:float=0.0):
-        if name not in self.timers:
+    def add_timer(self, name, milliseconds:float, num_repeats:int=-1, delay_MS:float=0.0):
+        if name not in self.timers.keys():
             self._cur_userevent_id += 1
             timer = GameTimer(name, self._cur_userevent_id, milliseconds, num_repeats, delay_MS)
             timer.ms_at_start = self.get_MS()
@@ -550,9 +493,14 @@ class GameApp:
             timer.active = True
 
     def stop_timer(self, name):
-        self.timers[name].active = False
+        if name in self.timers.keys():
+            self.timers[name].active = False
 
 
+    def add_section(self, name: str, section: GameSection):
+        section.on_start()
+        self.sections[name] = section
+        
     def start(self):
         if self.has_vk:
             self.virtual_keys.append(VirtualKey(self, 'L', kb.K_LEFT, (5,1)))
@@ -563,17 +511,18 @@ class GameApp:
             self.virtual_keys.append(VirtualKey(self, 'ESC', kb.K_ESCAPE, (1,0)))
             self.virtual_keys.append(VirtualKey(self, 'OK', kb.K_RETURN, (9,2)))
 
-
         while( self.is_running ):
 
             curTime = time.time() * 1000
             self._milliseconds_since_last_frame = curTime - self._milliseconds_since_start
             self._milliseconds_since_start =  curTime
 
-            self.on_start()
 
             for event in pygame.event.get():
-                self.on_event(event.type)
+                for section in self.sections.values():
+                    if section.active:
+                        if section.on_event(event.type) == False:
+                            break
 
                 if event.type == pygame.QUIT:
                     self.is_running = False
@@ -582,17 +531,27 @@ class GameApp:
                 self.mouse_position = Point(pos[0], pos[1])
                 if event.type == kb.KEYDOWN:
                     self.pressed_keys.append(event.key)
-                    self.on_key(True, event.key, event.mod)
+                    for section in self.sections.values():
+                        if section.active:
+                            if section.on_key(True, event.key, event.mod) == False:
+                                break
                 if event.type == kb.KEYUP:
                     self.pressed_keys.remove(event.key)
-                    self.on_key(False, event.key, event.mod)
+                    for section in self.sections.values():
+                        if section.active:
+                            if section.on_key(False, event.key, event.mod) == False:
+                                break
 
                 if event.type in (kb.MOUSEBUTTONDOWN, kb.MOUSEBUTTONUP):
                     for vk in self.virtual_keys:
                         vk: VirtualKey 
                         if self.mouse_position.x > vk.position.x - vk.diameter and self.mouse_position.x < vk.position.x + vk.diameter and \
                            self.mouse_position.y > vk.position.y - vk.diameter and self.mouse_position.y < vk.position.y + vk.diameter:
-                            self.on_key(event.type == kb.MOUSEBUTTONDOWN, vk.key, None)
+                            for section in self.sections.values():
+                                if section.active:
+                                    if section.on_key(event.type == kb.MOUSEBUTTONDOWN, vk.key, None) == False:
+                                        break
+                            
                             if event.type == kb.MOUSEBUTTONDOWN:
                                 self.pressed_keys.append(vk.key)
                             else:
@@ -600,13 +559,19 @@ class GameApp:
 
                 global gblScale
                 if event.type in (kb.MOUSEBUTTONDOWN, kb.MOUSEBUTTONUP):
-                    self.on_mouse(event.type == kb.MOUSEBUTTONDOWN, event.button, Point(self.mouse_position[0] / gblScale, self.mouse_position[1] / gblScale))
+                    for section in self.sections.values():
+                        if section.active:
+                            if section.on_mouse(event.type == kb.MOUSEBUTTONDOWN, event.button, Point(self.mouse_position[0] / gblScale, self.mouse_position[1] / gblScale)) == False:
+                                break
 
 
             for timer in self.timers.values():
                 if timer.active and self._milliseconds_since_start > timer.get_next_run_MS():
                     timer.num_loops_performed += 1
-                    self.on_timer(timer)
+                    for section in self.sections.values():
+                        if section.active:
+                            if section.on_timer(timer) == False:
+                                break
                     #check if last loop
                     #if not infinite timer
                     if timer.num_repeats >= 0 and timer.num_loops_performed > timer.num_repeats:
@@ -614,8 +579,12 @@ class GameApp:
 
 
                     
-            self.on_loop()
-            self.on_render()
+            for section in self.sections.values():
+                if section.active:
+                    if section.on_loop() == False:
+                        break
+                    if section.on_render() == False:
+                        break
 
             #display virtual keys if we have any
             for vk in self.virtual_keys:
@@ -623,14 +592,21 @@ class GameApp:
 
             pygame.display.flip()
 
-            self.on_after_render()
+            for section in self.sections.values():
+                if section.active:
+                    if section.on_after_render() == False:
+                        break
 
             self._clock.tick(self._fps)
  
-    def quit(self):
+    def stop(self):
         self.is_running = False
 
-
+    def set_gbl_anchor_point(self, anchor_point):
+        global gblAnchorPoint
+        gblAnchorPoint = anchor_point
 
 if __name__ == "__main__" :
     GameApp().start()
+
+# type: ignore

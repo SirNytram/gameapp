@@ -38,7 +38,7 @@ class Level(GameSection):
             self.player.rotation += 2
 
 
-        if self.player.position.distanceTo(self.enemy.position) < 40:
+        if self.player.position.distance_to(self.enemy.position) < 40:
             if not self.iscolliding:
                 self.crash_sound.play()
             self.iscolliding = True
@@ -78,7 +78,7 @@ class Level(GameSection):
                 self.player_bullets.append(bullet)
 
             if key == kb.K_ESCAPE:
-                self.gameapp.quit()
+                self.gameapp.stop()
 
 
 game = GameApp(display_number=1, width= 600, height=600)

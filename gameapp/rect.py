@@ -217,7 +217,7 @@ class Point():
     def __repr__(self) -> str:
         return f'Point({self._left},{self._top})'
     ###############
-    def distanceTo(self, point)->float:
+    def distance_to(self, point)->float:
         if type(point) != Point:
             point = Point(point[0], point[1])
 
@@ -225,7 +225,7 @@ class Point():
         dy = self._top - point._top
         return math.sqrt((dx*dx)+(dy*dy))
 
-    def rotateAround(self, angle, point):
+    def rotate_around(self, angle, point):
         if type(point) != Point:
             point = Point(point[0], point[1])
 
@@ -532,10 +532,16 @@ class Rect():
                 self.top < object.y and \
                 self.bottom  > object.y :
                     ret = True
+        elif type(object) in (list, tuple):
+            if self.collides_list(object) != -1:
+                ret = True
+        else:
+            raise Exception('unsupported type')
+            
         return ret
 
 
-    def collidesList(self, list)->int:
+    def collides_list(self, list)->int:
         ret = -1
         for i, object in enumerate(list):
             if self.collides(object):
@@ -558,10 +564,17 @@ class Rect():
                 self.top < object.y and \
                 self.bottom  > object.y :
                     ret = True
+        elif type(object) in (list, tuple):
+            if self.contains_list(object) != -1:
+                ret = True
+        else:
+            raise Exception('unsupported type')
+            
+        return ret
 
         return ret
         
-    def containsList(self, list):
+    def contains_list(self, list):
         ret = -1
         for i, rect in enumerate(list):
             if self.contains(rect):
@@ -569,3 +582,12 @@ class Rect():
 
         return ret
 
+
+if __name__ == "__main__" :
+
+    bullets = (Point(10,10), Point(100,50), Point(200,200), Point(20,20))
+    player = Rect(15,15,10,10)
+    if player.collides(bullets):
+        print('you are dead')
+
+    print(player.collides_list(bullets))
