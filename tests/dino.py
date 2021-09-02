@@ -43,5 +43,5 @@ class MainSection(GameSection):
    
 
 game = GameApp()
-game.sections['main'] = MainSection(game, True)
+game.add_section('main', MainSection(game, True))
 game.start()

@@ -19,5 +19,5 @@ class GameScreen(GameSection):
         self.canon.render()
 
 game = GameApp()
-game.sections['main'] = GameScreen(game, True)
+game.add_section('main', GameScreen(game, True))
 game.start() 

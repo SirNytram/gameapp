@@ -9,8 +9,8 @@ import time
 import math
 
 gblScale = 1.0
-# gblAnchorPoint = (0.5,0.5)
-gblAnchorPoint = (0.0,0.0)
+gblAnchorPoint = (0.5,0.5)
+# gblAnchorPoint = (0.0,0.0)
 class GameImage():
     def __init__(self, source = None, position = (0,0), *, anchor_point = None, rotation:float = 0.0, scale:float = 1.0, show_rect:bool=False):
         if anchor_point == None:
@@ -608,5 +608,3 @@ class GameApp:
 
 if __name__ == "__main__" :
     GameApp().start()
-
-# type: ignore

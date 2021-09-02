@@ -82,5 +82,5 @@ class Level(GameSection):
 
 
 game = GameApp(display_number=1, width= 600, height=600)
-game.sections['car'] = Level(game, True)
+game.add_section('car', Level(game, True))
 game.start()

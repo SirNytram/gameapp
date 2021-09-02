@@ -30,7 +30,7 @@ class Flappy():
 
     def animate(self):
         self.curimgno += 1
-        if self.curimgno > len(self.imgs):
+        if self.curimgno >= len(self.imgs):
             self.curimgno = 0
 
 class Pipe():
@@ -136,6 +136,6 @@ class Menu(GameSection):
                 self.gameapp.stop()
 
 game = GameApp(display_number=1, width= 600, height=600)
-game.sections['menu'] = Menu(game, True)
-game.sections['flappy'] = FlappyLevel(game)
+game.add_section('menu',Menu(game, True))
+game.add_section('flappy', FlappyLevel(game))
 game.start()
