@@ -304,13 +304,14 @@ class GameFont():
                 self.font = pygame.font.Font(self.name, int(self.size * gblScale))
 
 class GameText(GameImage):
-    def __init__(self, text = '', position = (0,0), color = (0,0,0), font = GameFont(), anchor_point = gblAnchorPoint):
+    def __init__(self, text = '', position = (0,0), rotation:float = 0.0, color = (0,0,0), font = GameFont(), anchor_point = gblAnchorPoint):
         super().__init__(position=position, anchor_point=anchor_point)
         if type(color) != Color:
             color = Color(color[0], color[1], color[2])
         self.color = color
         self.font = font
         self.text = text
+        self.rotation = rotation
 
     @property
     def text(self)->str:
@@ -327,6 +328,19 @@ class GameText(GameImage):
         self.text = str(text)
         self.render(position)
 
+    # ChatGPT-pasted function to outline text
+    def draw_text_with_outline(self, surface, text, font, text_color, outline_color, x, y, outline_width):
+        text_surface = font.render(text, True, text_color)
+        outline_surface = font.render(text, True, outline_color)
+
+        # Draw the outline
+        for dx in range(-outline_width, outline_width + 1):
+            for dy in range(-outline_width, outline_width + 1):
+                if dx * dx + dy * dy <= outline_width * outline_width:
+                    surface.blit(outline_surface, (x + dx, y + dy))
+
+        # Draw the main text
+        surface.blit(text_surface, (x, y))
 
 class GameAudio():
     def __init__(self, file_name = None, volume = 1):
