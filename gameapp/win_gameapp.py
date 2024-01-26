@@ -9,9 +9,13 @@ import time
 import math
 
 gblScale = 1.0
-gblAnchorPoint = (0.,0.)
+gblAnchorPoint = (0.5,0.5)
+# gblAnchorPoint = (0.0,0.0)
 class GameImage():
-    def __init__(self, source = None, position = (0,0), *, anchor_point = gblAnchorPoint, rotation:float = 0.0, scale:float = 1.0, show_rect:bool=False):
+    def __init__(self, source = None, position = (0,0), *, anchor_point = None, rotation:float = 0.0, scale:float = 1.0, show_rect:bool=False):
+        if anchor_point == None:
+            anchor_point = gblAnchorPoint
+        
         self._image = pygame.Surface((0,0))
         self.anchor_point = Point(anchor_point[0],anchor_point[1])
         self.rotation = rotation
@@ -28,8 +32,8 @@ class GameImage():
     @property
     def rect(self)->Rect:
         if self._position._changed:
-            self._rect._left = self._position._left - (self._rect._width * self.anchor_point[0])
-            self._rect._top = self._position._top - (self._rect._height * self.anchor_point[1])
+            self._rect._left = self._position._left - (self._rect._width * self.anchor_point.left)
+            self._rect._top = self._position._top - (self._rect._height * self.anchor_point.top)
             self._position._changed = False
 
         return self._rect
@@ -83,8 +87,6 @@ class GameImage():
         self._rect._top = self._position._top-(size[1]*self.anchor_point[1])
         self._rect._width = size[0]
         self._rect._height = size[1]
-
-
 
     def render(self, position = None):
         if position:
@@ -249,7 +251,9 @@ class GameShapeCircle(GameImage):
         self.radius = radius
         self.line_width = line_width
 
-        self.color = Color(color[0], color[1], color[2])
+        if type(color) != Color:
+            color = Color(color[0], color[1], color[2])
+        self.color = color
 
         self._image = pygame.Surface((self.radius * 2, self.radius * 2))
         self.update_rect(self._image)
@@ -304,7 +308,7 @@ class GameFont():
                 self.font = pygame.font.Font(self.name, int(self.size * gblScale))
 
 class GameText(GameImage):
-    def __init__(self, text = '', position = (0,0), rotation:float = 0.0, color = (0,0,0), font = GameFont(), anchor_point = gblAnchorPoint):
+    def __init__(self, text = '', position = (0,0), rotation:float = 0.0, color = (0,0,0), font = GameFont(), anchor_point = None):
         super().__init__(position=position, anchor_point=anchor_point)
         if type(color) != Color:
             color = Color(color[0], color[1], color[2])
@@ -472,7 +476,11 @@ class GameApp:
 
         global gblScale
         gblScale = scale
-        self._surface = pygame.display.set_mode((int(self.rect.width * gblScale), int(self.rect.height * gblScale + vkspace)), display=display_number)
+        try:
+            self._surface = pygame.display.set_mode((int(self.rect.width * gblScale), int(self.rect.height * gblScale + vkspace)), display=display_number)
+        except:
+            self._surface = pygame.display.set_mode((int(self.rect.width * gblScale), int(self.rect.height * gblScale + vkspace)), display=0)
+
         if full_screen == True:
             pygame.display.toggle_fullscreen()
       
@@ -614,5 +622,3 @@ class GameApp:
 
 if __name__ == "__main__" :
     GameApp().start()
-
-# type: ignore
